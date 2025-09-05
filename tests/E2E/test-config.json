@@ -1,0 +1,119 @@
+{
+  "specFlow": {
+    "language": {
+      "feature": "en-US"
+    },
+    "testFramework": "xUnit",
+    "bindingAssemblies": [
+      {
+        "assembly": "ECommerce.Tests.E2E"
+      }
+    ],
+    "stepAssemblies": [
+      {
+        "assembly": "ECommerce.Tests.E2E"
+      }
+    ]
+  },
+  "testSettings": {
+    "environments": {
+      "integration": {
+        "database": {
+          "connectionString": "Host=localhost;Port=5432;Database=ecommerce_test;Username=test;Password=test",
+          "provider": "PostgreSQL"
+        },
+        "redis": {
+          "connectionString": "localhost:6379",
+          "database": 0
+        },
+        "kafka": {
+          "bootstrapServers": "localhost:9092",
+          "topics": {
+            "orderEvents": "order-events",
+            "productEvents": "product-events",
+            "webhookEvents": "webhook-events"
+          }
+        },
+        "webhooks": {
+          "baseUrl": "http://localhost:8080/webhooks",
+          "timeout": 30000,
+          "maxRetries": 5
+        }
+      }
+    },
+    "tenants": {
+      "testTenants": [
+        {
+          "id": "tenant-a",
+          "name": "Company A",
+          "status": "active",
+          "webhookSecret": "test-secret-a-123"
+        },
+        {
+          "id": "tenant-b", 
+          "name": "Company B",
+          "status": "active",
+          "webhookSecret": "test-secret-b-456"
+        },
+        {
+          "id": "tenant-c",
+          "name": "Company C", 
+          "status": "inactive",
+          "webhookSecret": "test-secret-c-789"
+        }
+      ]
+    },
+    "users": {
+      "testUsers": [
+        {
+          "id": "user-1",
+          "email": "admin@platform.com",
+          "tenantId": "platform",
+          "roles": ["Admin"],
+          "jwtSecret": "platform-jwt-secret"
+        },
+        {
+          "id": "user-2", 
+          "email": "admin@companya.com",
+          "tenantId": "tenant-a",
+          "roles": ["TenantAdmin"],
+          "jwtSecret": "tenant-a-jwt-secret"
+        },
+        {
+          "id": "user-3",
+          "email": "merchant@companya.com", 
+          "tenantId": "tenant-a",
+          "roles": ["Merchant"],
+          "jwtSecret": "tenant-a-jwt-secret"
+        },
+        {
+          "id": "user-4",
+          "email": "customer@companya.com",
+          "tenantId": "tenant-a", 
+          "roles": ["Customer"],
+          "jwtSecret": "tenant-a-jwt-secret"
+        },
+        {
+          "id": "user-5",
+          "email": "merchant@companyb.com",
+          "tenantId": "tenant-b",
+          "roles": ["Merchant"], 
+          "jwtSecret": "tenant-b-jwt-secret"
+        }
+      ]
+    },
+    "retry": {
+      "defaultMaxRetries": 5,
+      "defaultBackoffMs": 1000,
+      "defaultJitterMs": 100,
+      "timeoutMs": 30000
+    },
+    "deadLetter": {
+      "retentionDays": 90,
+      "alertThresholds": {
+        "highRatePerHour": 10,
+        "tenantSpecificThreshold": 5
+      }
+    }
+  }
+}
